@@ -13,44 +13,86 @@ paths:
                 items:
                   $ref: '#/components/schemas/Adoption'
 
+  /api/adoptions/{aid}:
+    get:
+      tags: [Adoptions]
+      summary: Obtener adopción por ID
+      parameters:
+        - in: path
+          name: aid
+          required: true
+          schema:
+            type: string
+            format: objectid
+          example: "661f1f77bcf86cd799439011"
+      responses:
+        200:
+          description: Detalles de la adopción
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adoption'
+        404:
+          $ref: '#/components/responses/NotFound'
+
   /api/adoptions/{uid}/{pid}:
     post:
       tags: [Adoptions]
-      summary: Crear nueva adopcion
+      summary: Crear nueva adopción
       parameters:
         - in: path
           name: uid
           required: true
           schema:
             type: string
+            format: objectid
+          example: "507f1f77bcf86cd799439011"
         - in: path
           name: pid
           required: true
           schema:
             type: string
+            format: objectid
+          example: "507f1f77bcf86cd799439012"
       responses:
         201:
-          description: Adopcion exitosa
+          description: Adopción exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adoption'
         400:
           description: |
             Posibles errores:
-            - La mascota ya esta adoptada
+            - La mascota ya está adoptada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: |
             Posibles errores:
             - Usuario no encontrado
             - Mascota no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
     Adoption:
       type: object
       properties:
+        _id:
+          type: string
+          format: objectid
+          example: "661f1f77bcf86cd799439011"
         owner:
-          type: string
-          format: uuid
-          example: "507f1f77bcf86cd799439011"
+          $ref: '#/components/schemas/User'
         pet:
+          $ref: '#/components/schemas/Pet'
+        adoptionDate:
           type: string
-          format: uuid
-          example: "507f1f77bcf86cd799439012"
+          format: date-time
+          example: "2024-01-01T12:00:00Z"

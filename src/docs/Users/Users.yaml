@@ -13,9 +13,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                  $ref: '#/components/schemas/User'
         401:
-          $ref: "#/components/responses/Unauthorized"
+          $ref: '#/components/responses/Unauthorized'
 
   /api/users/{uid}:
     get:
@@ -27,6 +27,7 @@ paths:
           required: true
           schema:
             type: string
+            format: objectid
           example: "507f1f77bcf86cd799439011"
       responses:
         200:
@@ -34,10 +35,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
         404:
-          $ref: "#/components/responses/NotFound"
-
+          $ref: '#/components/responses/NotFound'
+    
     put:
       tags: [Users]
       summary: Actualizar usuario
@@ -47,18 +48,19 @@ paths:
           required: true
           schema:
             type: string
+            format: objectid
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: '#/components/schemas/User'
       responses:
         200:
           description: Usuario actualizado
         404:
-          $ref: "#/components/responses/NotFound"
-
+          $ref: '#/components/responses/NotFound'
+    
     delete:
       tags: [Users]
       summary: Eliminar usuario
@@ -68,17 +70,22 @@ paths:
           required: true
           schema:
             type: string
+            format: objectid
       responses:
         200:
           description: Usuario eliminado
         404:
-          $ref: "#/components/responses/NotFound"
+          $ref: '#/components/responses/NotFound'
 
 components:
   schemas:
     User:
       type: object
       properties:
+        _id:
+          type: string
+          format: objectid
+          example: "507f1f77bcf86cd799439011"
         first_name:
           type: string
           example: "Francisco"
@@ -97,5 +104,9 @@ components:
           type: array
           items:
             type: string
-            format: uuid
+            format: objectid
           example: ["507f1f77bcf86cd799439011", "507f1f77bcf86cd799439012"]
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-01T12:00:00Z"

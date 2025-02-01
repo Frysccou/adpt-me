@@ -25,6 +25,10 @@ paths:
       responses:
         201:
           description: Mascota creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
         400:
           $ref: '#/components/responses/ValidationError'
 
@@ -42,15 +46,23 @@ paths:
         - in: formData
           name: name
           type: string
+          example: "Firulais"
         - in: formData
           name: specie
           type: string
+          example: "Perro"
         - in: formData
           name: birthDate
           type: string
+          format: date
+          example: "2020-01-01"
       responses:
         201:
           description: Mascota creada con imagen
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
         400:
           $ref: '#/components/responses/ValidationError'
 
@@ -59,6 +71,10 @@ components:
     Pet:
       type: object
       properties:
+        _id:
+          type: string
+          format: objectid
+          example: "507f1f77bcf86cd799439011"
         name:
           type: string
           example: "Firulais"
@@ -75,3 +91,9 @@ components:
         adopted:
           type: boolean
           example: false
+        owner:
+          $ref: '#/components/schemas/User'
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-01T12:00:00Z"

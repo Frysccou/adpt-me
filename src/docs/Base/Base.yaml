@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: AdoptaPets API
   version: 1.0.0
-  description: API para gestion de adopciones de mascotas
+  description: API para gestión de adopciones de mascotas
 
 components:
   securitySchemes:
@@ -13,23 +13,53 @@ components:
   
   responses:
     Unauthorized:
-      description: No autenticado o token invalido
+      description: No autenticado o token inválido
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            InvalidToken:
+              value:
+                status: error
+                error: "Token inválido o expirado"
+                code: 401
+
     NotFound:
       description: Recurso no encontrado
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            UserNotFound:
+              value:
+                status: error
+                error: "Usuario no encontrado"
+                code: 404
+            PetNotFound:
+              value:
+                status: error
+                error: "Mascota no encontrada"
+                code: 404
+
     ValidationError:
-      description: Error de validacion en los datos
+      description: Error de validación en los datos
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            InvalidEmail:
+              value:
+                status: error
+                error: "Formato de email inválido"
+                code: 400
+            MissingFields:
+              value:
+                status: error
+                error: "Campos obligatorios faltantes"
+                code: 400
 
   schemas:
     ErrorResponse:
@@ -40,7 +70,7 @@ components:
           example: "error"
         error:
           type: string
-          example: "Descripcion del error"
+          example: "Descripción del error"
         code:
           type: integer
           example: 400

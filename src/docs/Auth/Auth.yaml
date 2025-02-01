@@ -12,14 +12,22 @@ paths:
               properties:
                 first_name:
                   type: string
+                  example: "Juan"
                 last_name:
                   type: string
+                  example: "Perez"
                 email:
                   type: string
                   format: email
+                  example: "usuario@example.com"
                 password:
                   type: string
                   format: password
+                  example: "Password123!"
+                role:
+                  type: string
+                  enum: ["user", "admin"]
+                  example: "user"
               required:
                 - first_name
                 - last_name
@@ -28,16 +36,17 @@ paths:
       responses:
         201:
           description: Usuario registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         400:
-          description: |
-            Posibles errores:
-            - Usuario ya existe
-            - Datos incompletos
+          $ref: '#/components/responses/ValidationError'
 
   /api/sessions/login:
     post:
       tags: [Auth]
-      summary: Iniciar sesion
+      summary: Iniciar sesión
       requestBody:
         required: true
         content:
@@ -48,19 +57,22 @@ paths:
                 email:
                   type: string
                   format: email
+                  example: "usuario@example.com"
                 password:
                   type: string
                   format: password
+                  example: "Password123!"
               required:
                 - email
                 - password
       responses:
         200:
-          description: Sesion iniciada
+          description: Sesión iniciada
           headers:
             Set-Cookie:
               schema:
                 type: string
+              example: "coderCookie=token; Path=/; HttpOnly"
           content:
             application/json:
               schema:
@@ -68,12 +80,14 @@ paths:
                 properties:
                   status:
                     type: string
+                    example: "success"
                   message:
                     type: string
+                    example: "Logged in"
         400:
-          description: Credenciales invalidas
+          $ref: '#/components/responses/ValidationError'
         404:
-          description: Usuario no existe
+          $ref: '#/components/responses/NotFound'
 
   /api/sessions/current:
     get:
