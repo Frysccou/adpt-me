@@ -1,0 +1,56 @@
+paths:
+  /api/adoptions:
+    get:
+      tags: [Adoptions]
+      summary: Obtener todas las adopciones
+      responses:
+        200:
+          description: Lista de adopciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Adoption'
+
+  /api/adoptions/{uid}/{pid}:
+    post:
+      tags: [Adoptions]
+      summary: Crear nueva adopcion
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Adopcion exitosa
+        400:
+          description: |
+            Posibles errores:
+            - La mascota ya esta adoptada
+        404:
+          description: |
+            Posibles errores:
+            - Usuario no encontrado
+            - Mascota no encontrada
+
+components:
+  schemas:
+    Adoption:
+      type: object
+      properties:
+        owner:
+          type: string
+          format: uuid
+          example: "507f1f77bcf86cd799439011"
+        pet:
+          type: string
+          format: uuid
+          example: "507f1f77bcf86cd799439012"

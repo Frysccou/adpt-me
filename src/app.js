@@ -3,6 +3,8 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import compression from 'compression';
 import helmet from 'helmet';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from "swagger-ui-express";
 
 import connectDB from './utils/mongo.js';
 import usersRouter from './routes/users.router.js';
@@ -17,6 +19,32 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'AdoptPets API',
+            version: '1.0.0',
+            description: 'API para sistema de adopcion de mascotas'
+        },
+        components: {
+            securitySchemes: {
+                cookieAuth: {
+                    type: 'apiKey',
+                    in: 'cookie',
+                    name: 'coderCookie'
+                }
+            }
+        }
+    },
+    apis: [
+        './src/docs/**/*.yaml',
+        './src/routes/*.js'
+    ]
+};
+
+const specs = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 connectDB();
 

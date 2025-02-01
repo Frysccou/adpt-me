@@ -1,0 +1,101 @@
+paths:
+  /api/users:
+    get:
+      tags: [Users]
+      summary: Obtener todos los usuarios
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+
+  /api/users/{uid}:
+    get:
+      tags: [Users]
+      summary: Obtener usuario por ID
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            type: string
+          example: "507f1f77bcf86cd799439011"
+      responses:
+        200:
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        404:
+          $ref: "#/components/responses/NotFound"
+
+    put:
+      tags: [Users]
+      summary: Actualizar usuario
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: Usuario actualizado
+        404:
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      tags: [Users]
+      summary: Eliminar usuario
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Usuario eliminado
+        404:
+          $ref: "#/components/responses/NotFound"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "Francisco"
+        last_name:
+          type: string
+          example: "Worowor"
+        email:
+          type: string
+          format: email
+          example: "usuario@example.com"
+        role:
+          type: string
+          enum: ["user", "admin"]
+          example: "user"
+        pets:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["507f1f77bcf86cd799439011", "507f1f77bcf86cd799439012"]

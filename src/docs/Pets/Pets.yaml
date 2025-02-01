@@ -1,0 +1,77 @@
+paths:
+  /api/pets:
+    get:
+      tags: [Pets]
+      summary: Obtener todas las mascotas
+      responses:
+        200:
+          description: Lista de mascotas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+    
+    post:
+      tags: [Pets]
+      summary: Crear nueva mascota
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        201:
+          description: Mascota creada
+        400:
+          $ref: '#/components/responses/ValidationError'
+
+  /api/pets/withimage:
+    post:
+      tags: [Pets]
+      summary: Crear mascota con imagen
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: image
+          type: file
+          description: Imagen de la mascota
+        - in: formData
+          name: name
+          type: string
+        - in: formData
+          name: specie
+          type: string
+        - in: formData
+          name: birthDate
+          type: string
+      responses:
+        201:
+          description: Mascota creada con imagen
+        400:
+          $ref: '#/components/responses/ValidationError'
+
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Firulais"
+        specie:
+          type: string
+          example: "Perro"
+        birthDate:
+          type: string
+          format: date
+          example: "2020-01-01"
+        image:
+          type: string
+          example: "/uploads/firulais.jpg"
+        adopted:
+          type: boolean
+          example: false

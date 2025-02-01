@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: AdoptaPets API
+  version: 1.0.0
+  description: API para gestion de adopciones de mascotas
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: coderCookie
+  
+  responses:
+    Unauthorized:
+      description: No autenticado o token invalido
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ValidationError:
+      description: Error de validacion en los datos
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "error"
+        error:
+          type: string
+          example: "Descripcion del error"
+        code:
+          type: integer
+          example: 400

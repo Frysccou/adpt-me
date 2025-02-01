@@ -1,0 +1,92 @@
+paths:
+  /api/sessions/register:
+    post:
+      tags: [Auth]
+      summary: Registrar nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - first_name
+                - last_name
+                - email
+                - password
+      responses:
+        201:
+          description: Usuario registrado
+        400:
+          description: |
+            Posibles errores:
+            - Usuario ya existe
+            - Datos incompletos
+
+  /api/sessions/login:
+    post:
+      tags: [Auth]
+      summary: Iniciar sesion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+      responses:
+        200:
+          description: Sesion iniciada
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        400:
+          description: Credenciales invalidas
+        404:
+          description: Usuario no existe
+
+  /api/sessions/current:
+    get:
+      tags: [Auth]
+      summary: Obtener usuario actual
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Usuario actual
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          $ref: '#/components/responses/Unauthorized'
