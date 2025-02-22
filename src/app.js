@@ -64,3 +64,5 @@ app.use(errorHandler);
 app.use(customErrorHandler);
 
 app.listen(PORT, () => console.log(`Corriendo en el puerto: ${PORT}`));
+
+export default app;
